@@ -6,4 +6,4 @@
     - [slitaz](./slitaz.7z)
 
 - **Labs**
-    - [lab01](./lab01/)
+    - [lab01-基础网络配置](./lab01/)
