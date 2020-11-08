@@ -38,14 +38,15 @@ sduo ip link set {ADAPTOR} down
 |:------:|:-:|:----:|
 |PC1|192.168.1.79/24|eth1|
 |PC1|192.168.105.147/24|eth2|
-|PC2|192.168.1.46//24|eth1|
+|PC2|192.168.1.46/24|eth1|
 |PC3|192.168.105.92/24|eth2|
 
 IP地址配置命令如下：
 ```shell
 #查看IP地址
 ip addr
-#添加IP地址sudo ip address add {NETWORK/MASK} dev {ADAPTOR}
+#添加IP地址
+sudo ip address add {NETWORK/MASK} dev {ADAPTOR}
 #删除IP地址
 sudo ip address add {NETWORK/MASK} dev {ADAPTOR}
 ```
@@ -83,8 +84,75 @@ sudo ip route add/del {NETWORK/MASK} via {GATEWAYIP} dev {ADAPTOR}
 sudo ip route add default via {GATEWAYIP}
 ```
 
-PC2:
+PC1路由表
+
+![PC2路由表](./pics/PC1路由表.png)
+
+PC2路由表
 ```shell
 sudo ip route add 192.168.105.0/24 via 192.168.1.79 dev eth1
 ip route
 ```
+![PC2路由表](./pics/PC2路由表.png)
+
+PC3路由表
+```shell
+sudo ip route add 192.168.1.0/24 via 192.168.105.147 dev eth1
+ip route
+```
+![PC2路由表](./pics/PC2路由表.png)
+
+## 4. PING测试
+
+### PC2->PC1
+
+```shell
+ping 192.168.1.79
+```
+![pc2->pc1](./pics/pc2_pc1_1.png)
+
+```shell
+ping 192.168.105.147
+```
+![pc2->pc1](./pics/pc2_pc1_2.png)
+
+测试成功！
+
+### PC3->PC1
+
+```shell
+ping 192.168.1.79
+```
+![pc3->pc1](./pics/pc3_pc1_1.png)
+
+```shell
+ping 192.168.105.147
+```
+![pc3->pc1](./pics/pc3_pc1_2.png)
+
+测试成功！
+
+### PC2->PC3第一次尝试
+
+```shell
+ping 192.168.105.92
+```
+![pc2->pc3](./pics/pc2_pc3_1.png)
+
+ping不通，测试失败
+
+### 启动PC1转发功能
+
+```
+sudo su
+echo "1"> /proc/sys/net/ipv4/ip_forward
+```
+
+### PC2->PC3第二次尝试
+
+```shell
+ping 192.168.105.92
+```
+![pc2->pc3](./pics/pc2_pc3_2.png)
+
+测试成功！
